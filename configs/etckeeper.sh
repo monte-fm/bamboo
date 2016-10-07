@@ -24,7 +24,7 @@ HIGHLEVEL_PACKAGE_MANAGER=apt
 LOWLEVEL_PACKAGE_MANAGER=dpkg
 " > /etc/etckeeper/etckeeper.conf
 
-git config --global user.email "you@example.com"
+git config --global user.email "bamboo_server@localhost"
 git config --global user.name "Bamboo user"
 
 cd /etc

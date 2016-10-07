@@ -1,10 +1,11 @@
 # Create container
+Create /bamboo folder and after create container with mounted volume:
 ```
-docker run -it -d --name=bamboo -h=bamboo -p 8085:8085 -p 8022:22 -p 54663:54663 cristo/bamboo /bin/bash
+docker run -it -d --name=bamboo -h=bamboo -p 8085:8085 -p 8022:22 -p 54663:54663  -v /bamboo/:/opt/bamboo-home/ cristo/bamboo /bin/bash
 ```
 # SSH as root user
 ```
-ssh -p1022 root@localhost
+ssh -p8022 root@localhost
 password: root
 ```
 
