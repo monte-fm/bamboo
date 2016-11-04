@@ -6,6 +6,18 @@ RUN apt-get update && apt-get upgrade -y
 RUN apt-get install -y software-properties-common python-software-properties \
     git git-core vim nano mc unzip wget htop tmux zip
 
+# Install Percona Mysql 5.7 server
+RUN wget https://repo.percona.com/apt/percona-release_0.1-3.$(lsb_release -sc)_all.deb
+RUN dpkg -i percona-release_0.1-3.$(lsb_release -sc)_all.deb
+RUN rm percona-release_0.1-3.$(lsb_release -sc)_all.deb
+RUN apt-get update
+RUN echo "percona-server-server-5.7 percona-server-server/root_password password root" | sudo debconf-set-selections
+RUN echo "percona-server-server-5.7 percona-server-server/root_password_again password root" | sudo debconf-set-selections
+RUN apt-get install --force-yes -y percona-server-server-5.7
+COPY configs/mysql/my.cnf /etc/mysql/my.cnf
+COPY configs/mysql/mysql-connector-java-5.1.40-bin.jar /root/mysql-connector-java-5.1.40-bin.jar
+RUN service mysql start && mysqladmin -uroot -proot create bamboo
+
 # Install SSH service
 RUN sudo apt-get install -y openssh-server openssh-client
 RUN sudo mkdir /var/run/sshd
@@ -22,18 +34,6 @@ COPY configs/autostart.sh /root/autostart.sh
 RUN  chmod +x /root/autostart.sh
 COPY configs/bash.bashrc /etc/bash.bashrc
 COPY configs/.bashrc /root/.bashrc
-
-# Install Percona Mysql 5.7 server
-RUN wget https://repo.percona.com/apt/percona-release_0.1-3.$(lsb_release -sc)_all.deb
-RUN dpkg -i percona-release_0.1-3.$(lsb_release -sc)_all.deb
-RUN rm percona-release_0.1-3.$(lsb_release -sc)_all.deb
-RUN apt-get update
-RUN echo "percona-server-server-5.7 percona-server-server/root_password password root" | sudo debconf-set-selections
-RUN echo "percona-server-server-5.7 percona-server-server/root_password_again password root" | sudo debconf-set-selections
-RUN apt-get install --force-yes -y percona-server-server-5.7
-COPY configs/mysql/my.cnf /etc/mysql/my.cnf
-COPY configs/mysql/mysql-connector-java-5.1.40-bin.jar /root/mysql-connector-java-5.1.40-bin.jar
-RUN service mysql start && mysqladmin -uroot -proot create bamboo
 
 # Install locale
 RUN locale-gen en_US.UTF-8
