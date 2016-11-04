@@ -23,7 +23,7 @@ RUN  chmod +x /root/autostart.sh
 COPY configs/bash.bashrc /etc/bash.bashrc
 COPY configs/.bashrc /root/.bashrc
 
-#Install Percona Mysql 5.6 server
+# Install Percona Mysql 5.6 server
 RUN wget https://repo.percona.com/apt/percona-release_0.1-3.$(lsb_release -sc)_all.deb
 RUN dpkg -i percona-release_0.1-3.$(lsb_release -sc)_all.deb
 RUN rm percona-release_0.1-3.$(lsb_release -sc)_all.deb
@@ -58,6 +58,17 @@ RUN chmod +x /root/etckeeper/*.sh
 RUN chmod +x /root/*.sh
 RUN /root/etckeeper.sh
 RUN rm /etc/apt/sources.list.d/*
+
+# Download and install Bamboo
+RUN cd /opt && wget https://www.atlassian.com/software/bamboo/downloads/binary/atlassian-bamboo-5.14.0.2.tar.gz
+RUN cd /opt && tar -xvzf atlassian-bamboo-5.14.0.2.tar.gz
+RUN rm /opt/atlassian-bamboo-5.14.0.2.tar.gz
+RUN echo "bamboo.home=/opt/bamboo-home" > /opt/atlassian-bamboo-5.14.0.2/atlassian-bamboo/WEB-INF/classes/bamboo-init.properties
+RUN wget https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-5.1.40.tar.gz
+RUN tar -xvzf mysql-connector-java-5.1.40.tar.gz
+RUN rm mysql-connector-java-5.1.40.tar.gz
+RUN mv mysql-connector-java-5.1.40/mysql-connector-java-5.1.40-bin.jar /opt/atlassian-bamboo-5.14.0.2/lib/
+RUN rm -rf mysql-connector-java-5.1.40
 
 # Open ports: Web, SSH, Bamboo-agent
 EXPOSE 8085 22 54663
