@@ -9,6 +9,13 @@ ssh -p8022 root@localhost
 password: root
 ```
 
+# MySQL
+```
+Database: bamboo
+User: root 
+Password: root
+```
+
 # etcKeeper 
 Added etcKeeper - autocommit on exit to /etc git local repository
 
