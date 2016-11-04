@@ -33,6 +33,7 @@ RUN echo "percona-server-server-5.6 percona-server-server/root_password_again pa
 RUN apt-get install -y percona-server-server-5.6
 COPY configs/mysql/my.cnf /etc/mysql/my.cnf
 COPY configs/mysql/mysql-connector-java-5.1.40-bin.jar /root/mysql-connector-java-5.1.40-bin.jar
+RUN service mysql start && mysqladmin -uroot -proot create bamboo
 
 # Install locale
 RUN locale-gen en_US.UTF-8
@@ -56,6 +57,7 @@ COPY configs/files/etckeeper-hook.sh /root/etckeeper/etckeeper-hook.sh
 RUN chmod +x /root/etckeeper/*.sh
 RUN chmod +x /root/*.sh
 RUN /root/etckeeper.sh
+RUN rm /etc/apt/sources.list.d/*
 
 # Open ports: Web, SSH, Bamboo-agent
 EXPOSE 8085 22 54663

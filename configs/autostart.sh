@@ -3,7 +3,6 @@
 # Start ssh and mysql services
 service ssh start
 service mysql start
-echo "create database bamboo" | mysql -uroot -proot
 
 # Download and install Bamboo
 cd /opt && wget https://www.atlassian.com/software/bamboo/downloads/binary/atlassian-bamboo-5.14.0.2.tar.gz
