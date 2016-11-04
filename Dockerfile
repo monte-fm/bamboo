@@ -6,16 +6,16 @@ RUN apt-get update && apt-get upgrade -y
 RUN apt-get install -y software-properties-common python-software-properties \
     git git-core vim nano mc unzip wget htop tmux zip
 
-# Install Percona Mysql 5.7 server
+# Install Percona Mysql 5.6 server
 RUN wget https://repo.percona.com/apt/percona-release_0.1-3.$(lsb_release -sc)_all.deb
 RUN dpkg -i percona-release_0.1-3.$(lsb_release -sc)_all.deb
 RUN rm percona-release_0.1-3.$(lsb_release -sc)_all.deb
+RUN apt-key adv --keyserver keys.gnupg.net --recv-keys 8507EFA5
 RUN apt-get update
-RUN echo "percona-server-server-5.7 percona-server-server/root_password password root" | sudo debconf-set-selections
-RUN echo "percona-server-server-5.7 percona-server-server/root_password_again password root" | sudo debconf-set-selections
-RUN apt-get install -qq -y percona-server-server-5.7
+RUN echo "percona-server-server-5.6 percona-server-server/root_password password root" | sudo debconf-set-selections
+RUN echo "percona-server-server-5.6 percona-server-server/root_password_again password root" | sudo debconf-set-selections
+RUN apt-get install -qq -y percona-server-server-5.6
 COPY configs/mysql/my.cnf /etc/mysql/my.cnf
-COPY configs/mysql/mysql-connector-java-5.1.40-bin.jar /root/mysql-connector-java-5.1.40-bin.jar
 RUN service mysql start && mysqladmin -uroot -proot create bamboo
 
 # Install SSH service
